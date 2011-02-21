@@ -18,37 +18,6 @@ namespace TwitterApplication
 {
     public partial class App : Application
     {
-        private static MainViewModel mainViewModel = null;
-        private static TweetsViewModel tweetsViewModel = null;
-
-        /// <summary>
-        /// A static ViewModel used by the views to bind against.
-        /// </summary>
-        /// <returns>The MainViewModel object.</returns>
-        public static MainViewModel MainViewModel
-        {
-            get
-            {
-                // Delay creation of the view model until necessary
-                if (mainViewModel == null)
-                    mainViewModel = new MainViewModel();
-
-                return mainViewModel;
-            }
-        }
-
-        public static TweetsViewModel TweetsViewModel
-        {
-            get
-            {
-                // Delay creation of the view model until necessary
-                if (tweetsViewModel == null)
-                    tweetsViewModel = new TweetsViewModel();
-
-                return tweetsViewModel;
-            }
-        }
-
         /// <summary>
         /// Provides easy access to the root frame of the Phone Application.
         /// </summary>
@@ -95,10 +64,10 @@ namespace TwitterApplication
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
             // Ensure that application state is restored appropriately
-            if (!App.MainViewModel.IsDataLoaded)
+            /*if (!App.MainViewModel.IsDataLoaded)
             {
                 App.MainViewModel.LoadData();
-            }
+            }*/
         }
 
         // Code to execute when the application is deactivated (sent to background)

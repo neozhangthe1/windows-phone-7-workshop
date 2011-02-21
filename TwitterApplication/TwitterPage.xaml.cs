@@ -11,32 +11,32 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using System.Windows.Navigation;
+using TwitterApplication.ViewModels;
 
 namespace TwitterApplication
 {
     public partial class TwitterPage : PhoneApplicationPage
     {
+        private TweetsViewModel _tvm;
+
         public TwitterPage()
         {
             InitializeComponent();
-
-            DataContext = App.TweetsViewModel;
+            _tvm = new TweetsViewModel();
         }
 
         // When page is navigated to set data context to selected item in list
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+
             string keyword = "";
             if (NavigationContext.QueryString.TryGetValue("keyword", out keyword))
             {
-                App.TweetsViewModel.Keyword = keyword;
-                App.TweetsViewModel.LoadData();
+                _tvm.Keyword = keyword;
+                _tvm.LoadData();
             }
-        }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            App.TweetsViewModel.RemoveData();
+            DataContext = _tvm;
         }
     }
 }

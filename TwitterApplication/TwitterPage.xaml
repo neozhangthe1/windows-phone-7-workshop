@@ -6,7 +6,8 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:TwitterApplication.View"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="800"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -30,45 +31,7 @@
                         <ImageBrush
                             ImageSource="Images/transparent_black.png" />
                     </Grid.Background>
-
-                    <!--ContentPanel - place additional content here-->
-                    <Grid
-                        x:Name="ContentPanel">
-                        <ListBox
-                            x:Name="TweetsListBox"
-                            Margin="12,12,0,12"
-                            HorizontalAlignment="Left" Height="Auto"
-                            Width="400"
-                            ItemsSource="{Binding Tweets}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel
-                                        Orientation="Horizontal">
-                                        <Image
-                                            Source="{Binding ProfileImage}"
-                                            Width="70"
-                                            Height="70"
-                                            VerticalAlignment="Top"
-                                            Margin="0,10,10,0" />
-                                        <StackPanel
-                                            Margin="0,0,0,17"
-                                            Width="350"
-                                            HorizontalAlignment="Left">
-                                            <TextBlock
-                                                Text="{Binding Profile}"
-                                                TextWrapping="Wrap"
-                                                Style="{StaticResource PhoneTextExtraLargeStyle}" />
-                                            <TextBlock
-                                                Text="{Binding Content}"
-                                                TextWrapping="Wrap"
-                                                Margin="12,-6,12,0"
-                                                Style="{StaticResource PhoneTextSubtleStyle}" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Grid>
+                    <views:TwitterView />
                 </Grid>
             </controls:PanoramaItem>
 
@@ -80,33 +43,8 @@
                         <ImageBrush
                             ImageSource="Images/transparent_black.png" />
                     </Grid.Background>
-
-                    <ListBox
-                            x:Name="FlicksListBox"
-                            Margin="12,12,0,12"
-                            HorizontalAlignment="Left" Height="Auto"
-                            Width="400"
-                            ItemsSource="{Binding Flicks}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <Image
-                                        Source="{Binding FlickrImage}"
-                                        Width="Auto"
-                                        Height="Auto"
-                                        VerticalAlignment="Top"
-                                        HorizontalAlignment="Center"
-                                        Margin="10" />
-
-                                    <TextBlock
-                                        Text="{Binding Title}"
-                                        TextWrapping="Wrap"
-                                        Style="{StaticResource PhoneTextExtraLargeStyle}" />
-                                </StackPanel>
-
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <views:FlickrView />
+                   
                 </Grid>
             </controls:PanoramaItem>
         </controls:Panorama>
