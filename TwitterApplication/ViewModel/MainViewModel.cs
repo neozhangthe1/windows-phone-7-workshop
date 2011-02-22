@@ -19,50 +19,19 @@ namespace TwitterApplication
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public MainViewModel()
-        {
-            this.Items = new ObservableCollection<MainModel>();
-        }
 
-        /// <summary>
-        /// A collection for ItemViewModel objects.
-        /// </summary>
-        public ObservableCollection<MainModel> Items { get; private set; }
+        private ObservableCollection<MainModel> _items;
 
-        private string _sampleProperty = "Sample Runtime Property Value";
-
-        /// <summary>
-        /// Sample ViewModel property; this property is used in the view to display its value using a Binding
-        /// </summary>
-        /// <returns></returns>
-        public string SampleProperty
-        {
-            get
-            {
-                return _sampleProperty;
-            }
+        public ObservableCollection<MainModel> Items {
+            get { return _items; }
             set
             {
-                if (value != _sampleProperty)
+                if (_items != value)
                 {
-                    _sampleProperty = value;
-                    NotifyPropertyChanged("SampleProperty");
+                    _items = value;
+                    NotifyPropertyChanged("Items");
                 }
             }
-        }
-
-        public bool IsDataLoaded
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Creates and adds a few ItemViewModel objects into the Items collection.
-        /// </summary>
-        public void LoadData()
-        {
-            this.IsDataLoaded = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -17,23 +17,15 @@ namespace TwitterApplication
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        private MainViewModel _mvm;
+        public MainViewModel Mvm { get; set; }
 
         // Constructor
         public MainPage()
         {
             InitializeComponent();
 
-            // Set the data context of the listbox control to the sample data
-            _mvm = new MainViewModel();
+            // Set the data context of the listbox control
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
-
-        }
-
-        // When page is navigated to set data context to selected item in list
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            DataContext = _mvm;
         }
 
         // Handle selection changed on ListBox
@@ -44,7 +36,7 @@ namespace TwitterApplication
                 return;
 
             // Navigate to the new page
-            NavigationService.Navigate(new Uri("/TwitterPage.xaml?keyword=" + _mvm.Items[MainListBox.SelectedIndex].Keyword, UriKind.Relative));
+            NavigateTo(Mvm.Items[MainListBox.SelectedIndex].Keyword);
 
             // Reset selected index to -1 (no selection)
             MainListBox.SelectedIndex = -1;
@@ -53,15 +45,22 @@ namespace TwitterApplication
         // Load data for the ViewModel Items
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!_mvm.IsDataLoaded)
-            {
-                _mvm.LoadData();
-            }
+            Mvm = (MainViewModel)DataContext;
         }
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            _mvm.Items.Add(new MainModel() { Keyword = txtSearch.Text});
+            Mvm.Items.Add(new MainModel() { Keyword = txtSearch.Text });
+            TwitterApplication.Util.Utils.SaveKeywordList(Mvm.Items, App.STORAGE_FILE_NAME);
+
+            NavigateTo(txtSearch.Text);
+            txtSearch.Text = "";
+        }
+
+        private void NavigateTo(string keyword)
+        {
+            // Navigate to the new page
+            NavigationService.Navigate(new Uri("/TwitterPage.xaml?keyword=" + keyword, UriKind.Relative));
         }
     }
 }

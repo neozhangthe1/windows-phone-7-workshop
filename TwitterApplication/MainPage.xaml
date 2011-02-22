@@ -10,7 +10,7 @@
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
-    SupportedOrientations="Portrait"
+    SupportedOrientations="PortraitOrLandscape"
     Orientation="Portrait"
     shell:SystemTray.IsVisible="True"
     d:DesignHeight="768"
@@ -46,11 +46,14 @@
                     Text=""
                     HorizontalAlignment="Stretch"
                     Width="376"/>
+
                 <Button
                     x:Name="btnSearch"
                     Content="Søk"
                     HorizontalAlignment="Right"
                     Click="btnSearch_Click" />
+                
+                
             </StackPanel>
         </StackPanel>
 
@@ -59,22 +62,36 @@
             x:Name="ContentPanel"
             Grid.Row="1"
             Margin="12,0,12,0">
-            <ListBox
-                x:Name="MainListBox"
-                Margin="0,0,-12,0"
-                ItemsSource="{Binding Items}"
-                SelectionChanged="MainListBox_SelectionChanged">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock
-                                Text="{Binding Keyword}"
-                                TextWrapping="Wrap"
-                                Style="{StaticResource PhoneTextExtraLargeStyle}" />
-                        </StackPanel>                        
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <StackPanel>
+                <TextBlock
+                    Text="Nøkkelord"
+                    TextWrapping="Wrap"
+                    Margin="10"
+                    Style="{StaticResource PhoneTextSubtleStyle}" />
+                <ListBox
+                    x:Name="MainListBox"
+                    Margin="10,0,0,0" 
+                    HorizontalAlignment="Left"
+                    ItemsSource="{Binding Items}"
+                    SelectionChanged="MainListBox_SelectionChanged">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    Text="{Binding Keyword}"
+                                    Margin="0,10,0,10"
+                                    Style="{StaticResource PhoneTextExtraLargeStyle}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
         </Grid>
     </Grid>
 
@@ -82,11 +99,11 @@
 
     <!--<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
+            <shell:ApplicationBarIconButton IconUri="./Images/edit.png" Text="Endre" />
+            <shell:ApplicationBarIconButton IconUri="./Images/delete.png" Text="Slett"/>
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
-                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+                <shell:ApplicationBarMenuItem Text="Menyelement 1"/>
+                <shell:ApplicationBarMenuItem Text="Menyelement 2"/>
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>-->

@@ -13,6 +13,10 @@ using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using TwitterApplication.ViewModels;
+using System.Collections.ObjectModel;
+using TwitterApplication.Model;
+using System.IO.IsolatedStorage;
+using System.Xml.Serialization;
 
 namespace TwitterApplication
 {
@@ -24,6 +28,8 @@ namespace TwitterApplication
         /// <returns>The root frame of the Phone Application.</returns>
         public PhoneApplicationFrame RootFrame { get; private set; }
 
+        public static string STORAGE_FILE_NAME = "Items.dat";
+        private static string STATE_KEY = "UnsavedItems";
         /// <summary>
         /// Constructor for the Application object.
         /// </summary>
@@ -36,7 +42,7 @@ namespace TwitterApplication
             if (System.Diagnostics.Debugger.IsAttached)
             {
                 // Display the current frame rate counters.
-                Application.Current.Host.Settings.EnableFrameRateCounter = true;
+                //Application.Current.Host.Settings.EnableFrameRateCounter = true;
 
                 // Show the areas of the app that are being redrawn in each frame.
                 //Application.Current.Host.Settings.EnableRedrawRegions = true;
@@ -57,24 +63,83 @@ namespace TwitterApplication
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            //Create new data object variable
+            MainViewModel _mvm = new MainViewModel();
+            ObservableCollection<MainModel> items = null;
+
+            //Try to load previously saved data from IsolatedStorage
+            using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                //Check if file exits
+                if (isf.FileExists(STORAGE_FILE_NAME))
+                {
+                    using (IsolatedStorageFileStream fs = isf.OpenFile(STORAGE_FILE_NAME, System.IO.FileMode.Open))
+                    {
+                        //Read the file contents and try to deserialize it back to data object
+                        XmlSerializer ser = new XmlSerializer(typeof(ObservableCollection<MainModel>));
+                        object obj = ser.Deserialize(fs);
+
+                        //If successfully deserialized, initialize data object variable with it
+                        if (null != obj && obj is ObservableCollection<MainModel>)
+                        {
+                            items = obj as ObservableCollection<MainModel>;
+                            TwitterApplication.Util.Utils.Trace("Fant " + items.Count + " elementer");
+                        }
+                        else
+                        {
+                            items = new ObservableCollection<MainModel>();
+                            TwitterApplication.Util.Utils.Trace("Fant ingen elementer");
+                        }
+                    }
+                }
+                else
+                {
+                    //If previous data not found, create new istance
+                    items = new ObservableCollection<MainModel>();
+                    TwitterApplication.Util.Utils.Trace("Fant ikke fil");
+                }
+                    
+            }
+            _mvm.Items = items;
+            //Set data variable (either recovered or new) as a DataContext for all the pages of the application
+            RootFrame.DataContext = _mvm;
         }
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
-            // Ensure that application state is restored appropriately
-            /*if (!App.MainViewModel.IsDataLoaded)
+            //Create new data object variable
+            MainViewModel _mvm = new MainViewModel();
+            ObservableCollection<MainModel> items = null;
+
+            //Try to locate previous data in transient state of the application
+            if (PhoneApplicationService.Current.State.ContainsKey(STATE_KEY))
             {
-                App.MainViewModel.LoadData();
-            }*/
+                //If found, initialize the data variable and remove in from application's state
+                items = PhoneApplicationService.Current.State[STATE_KEY] as ObservableCollection<MainModel>;
+                PhoneApplicationService.Current.State.Remove(STATE_KEY);
+            }
+
+            //If found set it as a DataContext for all the pages of the application
+            //An application is not guaranteed to be activated after it has been tombstoned, 
+            //thus if not found create new data object
+            if (null != items)                
+                _mvm.Items = items;
+            else
+                _mvm.Items = new ObservableCollection<MainModel>();
+
+
+            RootFrame.DataContext = _mvm;
         }
 
         // Code to execute when the application is deactivated (sent to background)
         // This code will not execute when the application is closing
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
-            // Ensure that required application state is persisted here.
+            //Add current data object to Application state
+            PhoneApplicationService.Current.State.Add(STATE_KEY, RootFrame.DataContext as ObservableCollection<MainModel>);
+   
         }
 
         // Code to execute when the application is closing (eg, user hit Back)

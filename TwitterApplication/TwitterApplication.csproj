@@ -60,6 +60,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -76,6 +77,7 @@
       <DependentUpon>TwitterPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\Configuration.cs" />
+    <Compile Include="Util\Utils.cs" />
     <Compile Include="ViewModel\TweetsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\FlickrView.xaml.cs">
@@ -118,6 +120,8 @@
     <Resource Include="Images\windows_panorama.png" />
     <Resource Include="Images\transparent_black.png" />
     <Resource Include="Images\windows_panorama_2.png" />
+    <Resource Include="Images\delete.png" />
+    <Resource Include="Images\edit.png" />
     <Content Include="SplashScreenImage.jpg" />
     <Content Include="Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
